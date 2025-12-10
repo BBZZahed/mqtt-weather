@@ -33,4 +33,3 @@ def publish_weather():
 if __name__ == "__main__":
     connect()
     publish_weather()
-    
