@@ -8,9 +8,11 @@ TOPIC = "weather/station1"
 
 client = mqtt.Client()
 
+
 def connect():
     print(f"Connecting to MQTT broker {BROKER} ...")
     client.connect(BROKER, 1883, 60)
+
 
 def publish_weather():
     while True:
@@ -26,6 +28,7 @@ def publish_weather():
         print(f"Published: {data}")
 
         time.sleep(3)
+
 
 if __name__ == "__main__":
     connect()
