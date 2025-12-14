@@ -19,7 +19,7 @@ while True:
         temperature = -999
     else:
         temperature = round(random.uniform(15, 30), 1)
-        
+
     if random.random() < 0.005:
         print("Simulierter Totalausfall")
         break
