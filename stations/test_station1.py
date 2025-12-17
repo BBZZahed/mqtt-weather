@@ -13,7 +13,7 @@ class TestStationData:
             "humidity": 45.3,
             "timestamp": "2025-12-17T12:00:00Z"
         }
-        
+
         # Test korrigiert
         assert data["temperature"] == 22.5
 
