@@ -1,7 +1,5 @@
-import pytest
 import json
-from unittest.mock import Mock, patch, MagicMock
-import station1
+from unittest.mock import patch, MagicMock
 
 
 class TestStationData:
@@ -10,28 +8,29 @@ class TestStationData:
     @patch('station1.mqtt.Client')
     @patch('station1.time.sleep')
     @patch('station1.time.strftime')
-    def test_data_structure(self, mock_strftime, mock_sleep, mock_mqtt_client):
+    def test_data_structure(self, mock_strftime, mock_sleep,
+                            mock_mqtt_client):
         """Test ob die Datenstruktur korrekt ist"""
         mock_strftime.return_value = "2025-12-17T12:00:00Z"
         mock_sleep.side_effect = [None, Exception("Stop")]
-        
+
         mock_client = MagicMock()
         mock_mqtt_client.return_value = mock_client
-        
+
         with patch('station1.random.uniform') as mock_uniform:
             mock_uniform.side_effect = [20.5, 45.3]
-            
+
             with patch('station1.random.random', return_value=0.5):
                 try:
                     exec(open('station1.py').read())
                 except Exception:
                     pass
-        
+
         assert mock_client.publish.called
-        
+
         call_args = mock_client.publish.call_args[0]
         published_data = json.loads(call_args[1])
-        
+
         assert "stationId" in published_data
         assert "temperature" in published_data
         assert "humidity" in published_data
@@ -41,7 +40,7 @@ class TestStationData:
         """Test ob Temperaturwerte im erwarteten Bereich liegen"""
         import random
         random.seed(42)
-        
+
         for _ in range(100):
             if random.random() >= 0.01:
                 temp = round(random.uniform(15, 30), 1)
@@ -51,7 +50,7 @@ class TestStationData:
         """Test ob Luftfeuchtigkeitswerte im erwarteten Bereich liegen"""
         import random
         random.seed(42)
-        
+
         for _ in range(100):
             humidity = round(random.uniform(30, 60), 1)
             assert 30 <= humidity <= 60
@@ -67,7 +66,7 @@ class TestStationData:
         import os
         station_id = os.getenv("STATION_ID", "WS-XX")
         interval = int(os.getenv("INTERVAL", "5"))
-        
+
         assert station_id == "TEST-01"
         assert interval == 10
 
@@ -77,7 +76,7 @@ class TestStationData:
         with patch.dict('os.environ', {}, clear=True):
             station_id = os.getenv("STATION_ID", "WS-XX")
             interval = int(os.getenv("INTERVAL", "5"))
-            
+
             assert station_id == "WS-XX"
             assert interval == 5
 
@@ -90,10 +89,10 @@ class TestStationData:
             "humidity": 45.3,
             "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
         }
-        
+
         json_str = json.dumps(data)
         parsed = json.loads(json_str)
-        
+
         assert parsed["stationId"] == "WS-01"
         assert parsed["temperature"] == 22.5
         assert parsed["humidity"] == 45.3
