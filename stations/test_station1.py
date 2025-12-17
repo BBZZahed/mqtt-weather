@@ -97,3 +97,4 @@ class TestStationData:
         assert parsed["temperature"] == 22.5
         assert parsed["humidity"] == 45.3
         assert "timestamp" in parsed
+        
