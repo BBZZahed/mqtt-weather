@@ -1,5 +1,5 @@
 import json
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 
 
 class TestStationData:
@@ -14,8 +14,8 @@ class TestStationData:
             "timestamp": "2025-12-17T12:00:00Z"
         }
         
-        # DIESER TEST WIRD FEHLSCHLAGEN
-        assert data["temperature"] == 100.0  # Falscher Wert!
+        # Test korrigiert
+        assert data["temperature"] == 22.5
 
     def test_temperature_range(self):
         """Test ob Temperaturwerte im erwarteten Bereich liegen"""
@@ -78,4 +78,3 @@ class TestStationData:
         assert parsed["temperature"] == 22.5
         assert parsed["humidity"] == 45.3
         assert "timestamp" in parsed
-        
