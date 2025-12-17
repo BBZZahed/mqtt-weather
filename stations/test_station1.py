@@ -27,14 +27,11 @@ class TestStationData:
                 except Exception:
                     pass
         
-        # Prüfe ob publish aufgerufen wurde
         assert mock_client.publish.called
         
-        # Hole die veröffentlichten Daten
         call_args = mock_client.publish.call_args[0]
         published_data = json.loads(call_args[1])
         
-        # Prüfe Struktur
         assert "stationId" in published_data
         assert "temperature" in published_data
         assert "humidity" in published_data
