@@ -5,36 +5,17 @@ from unittest.mock import patch, MagicMock
 class TestStationData:
     """Tests für die Wetterstations-Daten"""
 
-    @patch('station1.mqtt.Client')
-    @patch('station1.time.sleep')
-    @patch('station1.time.strftime')
-    def test_data_structure(self, mock_strftime, mock_sleep,
-                            mock_mqtt_client):
+    def test_data_structure(self):
         """Test ob die Datenstruktur korrekt ist"""
-        mock_strftime.return_value = "2025-12-17T12:00:00Z"
-        mock_sleep.side_effect = [None, Exception("Stop")]
-
-        mock_client = MagicMock()
-        mock_mqtt_client.return_value = mock_client
-
-        with patch('station1.random.uniform') as mock_uniform:
-            mock_uniform.side_effect = [20.5, 45.3]
-
-            with patch('station1.random.random', return_value=0.5):
-                try:
-                    exec(open('station1.py').read())
-                except Exception:
-                    pass
-
-        assert mock_client.publish.called
-
-        call_args = mock_client.publish.call_args[0]
-        published_data = json.loads(call_args[1])
-
-        assert "stationId" in published_data
-        assert "temperature" in published_data
-        assert "humidity" in published_data
-        assert "timestamp" in published_data
+        data = {
+            "stationId": "WS-01",
+            "temperature": 22.5,
+            "humidity": 45.3,
+            "timestamp": "2025-12-17T12:00:00Z"
+        }
+        
+        # DIESER TEST WIRD FEHLSCHLAGEN
+        assert data["temperature"] == 100.0  # Falscher Wert!
 
     def test_temperature_range(self):
         """Test ob Temperaturwerte im erwarteten Bereich liegen"""
