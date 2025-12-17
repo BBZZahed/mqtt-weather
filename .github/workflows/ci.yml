@@ -23,10 +23,26 @@ jobs:
       - name: Run flake8
         run: flake8 .
 
+  test:
+    name: Test Python Code
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: stations
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run pytest
+        run: pytest -v
+
   build-and-push:
     name: Build & Push Docker Image
     runs-on: ubuntu-latest
-    needs: lint
+    needs: [lint, test]
     if: github.event_name == 'push'
     steps:
       - uses: actions/checkout@v4
